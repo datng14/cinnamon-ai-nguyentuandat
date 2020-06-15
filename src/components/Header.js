@@ -1,39 +1,53 @@
 import React from "react";
-import Navbar from "react-bootstrap/Navbar";
 import logo from "../assets/img/logo.png";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const Wrapper = styled.div`
-  .navbar {
-    border-bottom: 1px solid #ccc;
-  }
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
 
-  .nav-logo {
-    width: 200px;
-  }
-  .navbar-brand {
-    color: #666;
-    font-size: 16px;
+  .navbar {
+    &-left {
+      .nav-logo {
+        width: 200px;
+      }
+    }
+
+    &-right {
+      display: flex;
+      align-items: center;
+      .navbar-brand {
+        color: #666;
+        font-size: 16px;
+        margin-left: 5px;
+        margin-right: 5px;
+        text-decoration: none;
+        &:hover {
+          font-weight: bold;
+        }
+      }
+    }
   }
 `;
 
 function Header(props) {
   return (
     <Wrapper>
-      <Navbar>
-        <Navbar.Brand href="#home">
+      <div className="navbar-left">
+        <a href="#home">
           <img src={logo} alt="logo" className="nav-logo" />
-        </Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse className="justify-content-end">
-          <Navbar.Brand href="#">Home</Navbar.Brand>
-          <Navbar.Brand href="#">
-            <FontAwesomeIcon icon={faBars} color="#666" />
-          </Navbar.Brand>
-        </Navbar.Collapse>
-      </Navbar>
+        </a>
+      </div>
+      <div className="navbar-right">
+        <a className="navbar-brand" href="#home">
+          Home
+        </a>
+        <MenuIcon />
+      </div>
     </Wrapper>
   );
 }
