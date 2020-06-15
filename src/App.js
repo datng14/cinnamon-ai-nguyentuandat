@@ -2,15 +2,14 @@ import React, { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Stage from "./components/Stage";
 import dummyData from "./assets/rankList";
-import Toastify from "./components/Toastify";
 import cloneDeep from "lodash/cloneDeep";
+import { useSnackbar } from "notistack";
 
 const MAX_POINT = 2500;
 
 function App() {
   const [rankList, setRankList] = useState(dummyData);
-  const [showToast, setShowToast] = useState(false);
-  const [tempDataUpdate, setTempDataUpdate] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     let data = cloneDeep(rankList);
@@ -18,52 +17,41 @@ function App() {
       .sort((a, b) => b.point - a.point)
       .map(
         (item) =>
-          (item.rate =
+          (item.level =
             item.point > 0 ? Math.round((item.point / MAX_POINT) * 100) : 0)
       );
-    console.log(data);
     setRankList(data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const deleteItem = (key) => {
-    let data = rankList.filter((item) => item.no !== key);
+  const deleteItem = (selected) => {
+    let data = rankList.filter((item) => !selected.includes(item.no));
     setRankList(data);
-    setShowToast(true);
+    enqueueSnackbar("Deleted Successfully!", { variant: "success" });
   };
 
-  const handleChange = (event, key) => {
-    setTempDataUpdate([]);
+  const handleUpdate = (data) => {
     const tempData = cloneDeep(rankList);
-    let itemIndex = tempData.findIndex((item) => item.no === key);
-    tempData[itemIndex][event.target.name] = event.target.value;
+    let itemIndex = tempData.findIndex((item) => item.no === data.no);
+    tempData[itemIndex] = data;
+    tempData[itemIndex].point = parseInt(data.point, 10);
     tempData
       .sort((a, b) => b.point - a.point)
       .map(
         (item) =>
-          (item.rate =
+          (item.level =
             item.point > 0 ? Math.round((item.point / MAX_POINT) * 100) : 0)
       );
-    setTempDataUpdate(tempData);
-  };
-
-  const handleUpdate = () => {
-    setRankList(tempDataUpdate);
-    setTempDataUpdate([]);
+    setRankList(tempData);
   };
 
   return (
     <div className="App">
       <Header />
-      <Toastify
-        title="Successfully"
-        content="Deleted this successfully!"
-        show={showToast}
-        onClose={() => setShowToast(false)}
-      />
+
       <Stage
         rankList={rankList}
         handleDelete={deleteItem}
-        handleChange={handleChange}
         handleUpdate={handleUpdate}
       />
     </div>

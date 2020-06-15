@@ -3,5 +3,17 @@ import ReactDOM from "react-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 import App from "./App";
+import { SnackbarProvider } from "notistack";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <SnackbarProvider
+    maxSnack={3}
+    anchorOrigin={{
+      vertical: "top",
+      horizontal: "right",
+    }}
+  >
+    <App />
+  </SnackbarProvider>,
+  document.getElementById("root")
+);

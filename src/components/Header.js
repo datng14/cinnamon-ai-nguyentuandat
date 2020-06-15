@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   }
 
   .nav-logo {
-    width: 150px;
+    width: 200px;
   }
   .navbar-brand {
     color: #666;
